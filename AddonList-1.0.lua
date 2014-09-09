@@ -17,27 +17,25 @@ You should have received a copy of the GNU General Public License
 along with AddonList. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-local Lib = LibStub:NewLibrary('AddonList-1.0', 1)
+local Lib = LibStub:NewLibrary('AddonList-1.0', 2)
 if not Lib then
 	return
+else
+	Lib.index = {}
+
+	for i = 1, GetNumAddOns() do
+		Lib.index[GetAddOnInfo(i)] = i
+	end
 end
 
 function Lib:IsEnabled(name)
-	local i = self:GetIndex(name)
+	local i = self.index[name]
 	return i and GetAddOnEnableState(UnitName('player'), i) >= 2
 end
 
 function Lib:GetInfo(name)
-	local i = self:GetIndex(name)
+	local i = self.index[name]
 	if i then
 		return GetAddOnInfo(i)
-	end
-end
-
-function Lib:GetIndex(name)
-	for i = 1, GetNumAddOns() do
-		if GetAddOnInfo(i) ==  name then
-			return i
-		end
 	end
 end
